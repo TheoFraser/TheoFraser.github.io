@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theo Fraser | Developer Portfolio</title>
+    <meta name="description" content="Theo Fraser - Software Developer specializing in Go, C++, Java, MATLAB, and distributed systems. Explore my projects in game development, system programming, and computer science coursework.">
+    
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #00d4ff;
+            --accent: #ff00ff;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050714;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --card-bg: rgba(16, 20, 44, 0.8);
+            --border: rgba(0, 255, 136, 0.2);
+            --go-blue: #00ADD8;
+            --cpp-blue: #00599C;
+            --matlab-orange: #FF6F00;
+            --java-red: #f89820;
+            --python-blue: #3776ab;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-darker);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 255, 136, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .bg-animation::before,
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .bg-animation::before {
+            top: 20%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            animation: float 20s ease infinite;
+        }
+
+        .bg-animation::after {
+            bottom: 20%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            animation: float-reverse 15s ease infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, -50px); }
+        }
+
+        @keyframes float-reverse {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, 50px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.5rem;
+            background: var(--primary);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Skills Section */
+        .skills {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .skills-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+            border-color: var(--primary);
+        }
+
+        .project-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            padding: 0 1.5rem 1rem;
+            line-height: 1.6;
+            min-height: 80px;
+        }
+
+        .project-features {
+            padding: 0 1.5rem 1rem;
+        }
+
+        .project-features ul {
+            list-style: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .project-features li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-features li::before {
+            content: '▸';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        .project-tech {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .tech-tag.go {
+            background: rgba(0, 173, 216, 0.1);
+            color: var(--go-blue);
+            border-color: rgba(0, 173, 216, 0.3);
+        }
+
+        .tech-tag.cpp {
+            background: rgba(0, 89, 156, 0.1);
+            color: var(--cpp-blue);
+            border-color: rgba(0, 89, 156, 0.3);
+        }
+
+        .tech-tag.matlab {
+            background: rgba(255, 111, 0, 0.1);
+            color: var(--matlab-orange);
+            border-color: rgba(255, 111, 0, 0.3);
+        }
+
+        .tech-tag.java {
+            background: rgba(248, 152, 32, 0.1);
+            color: var(--java-red);
+            border-color: rgba(248, 152, 32, 0.3);
+        }
+
+        .tech-tag.python {
+            background: rgba(55, 118, 171, 0.1);
+            color: var(--python-blue);
+            border-color: rgba(55, 118, 171, 0.3);
+        }
+
+        .project-links {
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 3rem 2rem;
+            background: rgba(16, 20, 44, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">TF</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content fade-in">
+            <h1>Theo Fraser</h1>
+            <p class="subtitle">
+                <span id="typewriter"></span>
+                <span class="typing-cursor"></span>
+            </p>
+            <p class="hero-description">
+                Passionate software developer with expertise in distributed systems, game development, and computer vision. 
+                Building efficient solutions with Go, C++, Java, and MATLAB.
+            </p>
+            <div class="social-links">
+                <a href="https://github.com/TheoFraser" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/theofraser" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="mailto:theo@example.com">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <h2 class="section-title animate-on-scroll">Technical Skills</h2>
+        <div class="skills-categories animate-on-scroll">
+            <div class="skill-category">
+                <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">Go</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">MATLAB</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">C</span>
+                    <span class="skill-tag">JavaScript</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3><i class="fas fa-tools"></i> Technologies & Frameworks</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">SFML 3.0</span>
+                    <span class="skill-tag">CMake</span>
+                    <span class="skill-tag">Java RMI</span>
+                    <span class="skill-tag">RSA Encryption</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">TCP/IP</span>
+                    <span class="skill-tag">WebSockets</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3><i class="fas fa-brain"></i> Specializations</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">Distributed Systems</span>
+                    <span class="skill-tag">Game Development</span>
+                    <span class="skill-tag">Computer Vision</span>
+                    <span class="skill-tag">Compiler Design</span>
+                    <span class="skill-tag">Network Programming</span>
+                    <span class="skill-tag">Operating Systems</span>
+                    <span class="skill-tag">AI & Machine Learning</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <h2 class="section-title animate-on-scroll">Featured Projects</h2>
+        <div class="projects-grid">
+            
+            <!-- Project: Go -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Go System Programming</h3>
+                </div>
+                <p class="project-description">
+                    Advanced Go programming projects demonstrating system-level programming, concurrency, and network applications.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Concurrent programming with goroutines</li>
+                        <li>Network service development</li>
+                        <li>System monitoring tools</li>
+                        <li>Performance optimization</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag go">Go</span>
+                    <span class="tech-tag">Concurrency</span>
+                    <span class="tech-tag">Systems Programming</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/Go" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Arcade-SFML -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Arcade Platform - SFML</h3>
+                </div>
+                <p class="project-description">
+                    Arcade platform designed to host multiple games, currently featuring Snake. Built with modern C++ and SFML 3.0 for graphics.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Classic Snake game implementation</li>
+                        <li>SFML 3.0 graphics engine</li>
+                        <li>Cross-platform support (Windows/Linux)</li>
+                        <li>Expandable platform for multiple games</li>
+                        <li>CMake build system</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag cpp">C++</span>
+                    <span class="tech-tag">SFML 3.0</span>
+                    <span class="tech-tag">CMake</span>
+                    <span class="tech-tag">Game Dev</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/Arcade-SFML" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Media Coding -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Media Coding & Image Processing</h3>
+                </div>
+                <p class="project-description">
+                    Advanced image processing algorithms implemented from scratch in MATLAB, including transformations and feature detection.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Piece-wise Linear Transformation</li>
+                        <li>Histogram Equalization</li>
+                        <li>Gaussian Filtering</li>
+                        <li>Harris interest point detector</li>
+                        <li>Robustness analysis on image shifts</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag matlab">MATLAB</span>
+                    <span class="tech-tag">Image Processing</span>
+                    <span class="tech-tag">Computer Vision</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.366.MediaCoding" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Third Year Project -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Third Year Project</h3>
+                </div>
+                <p class="project-description">
+                    Comprehensive final year project demonstrating advanced software engineering skills and research capabilities.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Research-based implementation</li>
+                        <li>Advanced algorithm development</li>
+                        <li>Performance analysis</li>
+                        <li>Documentation and testing</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">Research</span>
+                    <span class="tech-tag">Software Engineering</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/Third-Year-Project" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Databases -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Multiplayer FPS Game Database</h3>
+                </div>
+                <p class="project-description">
+                    Database system designed for a multiplayer FPS game, handling player data, statistics, and game state management.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Player statistics tracking</li>
+                        <li>Match history storage</li>
+                        <li>Leaderboard system</li>
+                        <li>Efficient query optimization</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">Database Design</span>
+                    <span class="tech-tag">Game Backend</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.201.Databases" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Software Design -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Power Management System Design</h3>
+                </div>
+                <p class="project-description">
+                    Designed comprehensive class diagrams for a simplified Domestic Power Management Application using UML.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>UML class diagram design</li>
+                        <li>System architecture planning</li>
+                        <li>Object-oriented design patterns</li>
+                        <li>Power consumption modeling</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">UML</span>
+                    <span class="tech-tag">Software Design</span>
+                    <span class="tech-tag">OOP</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.204.SoftwareDesign" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Operating Systems -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Operating Systems & FAT16 Reader</h3>
+                </div>
+                <p class="project-description">
+                    Low-level systems programming including concurrent Java applications and FAT16 filesystem implementation.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Thread synchronization in Java</li>
+                        <li>FAT16 filesystem reader in C</li>
+                        <li>SD card file system parsing</li>
+                        <li>Concurrent programming patterns</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag java">Java</span>
+                    <span class="tech-tag">C</span>
+                    <span class="tech-tag">Concurrency</span>
+                    <span class="tech-tag">File Systems</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.211.OperatingSystems" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Distributed Systems -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Fault-Tolerant Auction System</h3>
+                </div>
+                <p class="project-description">
+                    Built a distributed auction system with authentication, passive replication, and fault tolerance using Java RMI.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Java RMI client-server architecture</li>
+                        <li>RSA 2048-bit authentication</li>
+                        <li>Passive replication with stateless front-end</li>
+                        <li>Automatic failover mechanism</li>
+                        <li>Primary replica takeover on crash</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag java">Java</span>
+                    <span class="tech-tag">Java RMI</span>
+                    <span class="tech-tag">RSA</span>
+                    <span class="tech-tag">Distributed Systems</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.311.DistributedSystems" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Languages and Compilation -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Recursive Descent Parser</h3>
+                </div>
+                <p class="project-description">
+                    Created a complete compiler frontend with lexical analysis and recursive descent parsing in Java.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Lexical analyzer (Token generation)</li>
+                        <li>Syntax analyzer implementation</li>
+                        <li>Recursive descent recognizer</li>
+                        <li>Parse tree generation</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag java">Java</span>
+                    <span class="tech-tag">Compiler Design</span>
+                    <span class="tech-tag">Parsing</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.312.LanguagesAndCompilation" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Artificial Intelligence -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">AI Game Agent - Connect4 MCTS</h3>
+                </div>
+                <p class="project-description">
+                    Implemented genetic algorithms and Monte Carlo Tree Search for Connect4 game AI with performance optimization.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Monte Carlo Tree Search implementation</li>
+                        <li>Genetic algorithm optimization</li>
+                        <li>Performance profiling with JoularJX</li>
+                        <li>Strategy evolution and selection</li>
+                        <li>Power consumption monitoring</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag java">Java</span>
+                    <span class="tech-tag">AI</span>
+                    <span class="tech-tag">MCTS</span>
+                    <span class="tech-tag">Genetic Algorithms</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC361.ArtificialIntelligence" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Security and Risk -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Security & Risk Management</h3>
+                </div>
+                <p class="project-description">
+                    Comprehensive security analysis and risk assessment projects focusing on system vulnerabilities and mitigation strategies.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>Security vulnerability analysis</li>
+                        <li>Risk assessment methodologies</li>
+                        <li>Threat modeling</li>
+                        <li>Security best practices</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">Security</span>
+                    <span class="tech-tag">Risk Analysis</span>
+                    <span class="tech-tag">Cryptography</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.363.SecurityAndRisk" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project: Computer Networks -->
+            <div class="project-card animate-on-scroll">
+                <div class="project-header">
+                    <h3 class="project-title">Network Applications Suite</h3>
+                </div>
+                <p class="project-description">
+                    Implementation of network protocols and applications including ICMP ping, traceroute, web server, and proxy.
+                </p>
+                <div class="project-features">
+                    <ul>
+                        <li>ICMP ping implementation</li>
+                        <li>Custom traceroute tool</li>
+                        <li>HTTP web server</li>
+                        <li>Proxy server with caching</li>
+                        <li>Network topology simulation</li>
+                    </ul>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag python">Python</span>
+                    <span class="tech-tag">TCP/IP</span>
+                    <span class="tech-tag">HTTP</span>
+                    <span class="tech-tag">Network Protocols</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/TheoFraser/SCC.203.ComputerNetworks" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-target="12">0</div>
+                <div class="stat-label">Major Projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="7">0</div>
+                <div class="stat-label">Languages Used</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="5">0</div>
+                <div class="stat-label">Specializations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="10000">0</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title animate-on-scroll">Get In Touch</h2>
+        <div class="animate-on-scroll">
+            <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+                I'm passionate about distributed systems, game development, and building efficient software solutions. 
+                Whether you're interested in collaboration, have questions about my projects, or just want to connect, 
+                I'd love to hear from you!
+            </p>
+            <div class="contact-buttons">
+                <a href="mailto:theo@example.com" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> Send Email
+                </a>
+                <a href="https://github.com/TheoFraser" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> GitHub Profile
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Theo Fraser. Built with passion and code.</p>
+    </footer>
+
+    <script>
+        // Hide loader when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hide');
+            }, 500);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Typewriter effect
+        const phrases = [
+            "Software Developer",
+            "Systems Programmer",
+            "Game Developer",
+            "Distributed Systems Engineer",
+            "Problem Solver"
+        ];
+        
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typewriter = document.getElementById('typewriter');
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (!isDeleting) {
+                typewriter.textContent = currentPhrase.substring(0, charIndex++);
+                if (charIndex === currentPhrase.length + 1) {
+                    isDeleting = true;
+                    setTimeout(type, 2000);
+                    return;
+                }
+            } else {
+                typewriter.textContent = currentPhrase.substring(0, charIndex--);
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                }
+            }
+            
+            setTimeout(type, isDeleting ? 50 : 100);
+        }
+
+        // Start typewriter
+        type();
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animated counter for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 10);
+                    } else {
+                        counter.innerText = target;
+                        if (target === 10000) {
+                            counter.innerText = "10,000+";
+                        }
+                    }
+                };
+
+                // Start animation when element is visible
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCount();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                observer.observe(counter);
+            });
+        }
+
+        animateCounters();
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Dynamic year in footer
+        const year = new Date().getFullYear();
+        document.querySelector('footer p').innerHTML = `&copy; ${year} Theo Fraser. Built with passion and code.`;
+    </script>
+</body>
+</html>
